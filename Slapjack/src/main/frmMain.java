@@ -91,7 +91,6 @@ public class frmMain extends javax.swing.JFrame {
                     contadorJugadores++;
                     System.out.println("Jugador " + this.numero + " saliendo de la región crítica");
                     mutex.release();
-                    
                     intento = true;
                     System.out.println("Jugador " + this.numero + " esperando resultados");
                 }
@@ -118,7 +117,7 @@ public class frmMain extends javax.swing.JFrame {
         }
     }
 
-    public class Uno {
+    public class Uno extends Thread{
 
         private int numeroCarta;
 
@@ -137,7 +136,8 @@ public class frmMain extends javax.swing.JFrame {
             model = new DefaultTableModel(columnNames, 0);
         }
 
-        public void comenzar_juego() {
+        
+            public void run() {
             System.out.println("--------------INICIO------------------------");
             System.out.println("Preparando el juego");
             System.out.println("Barajeando...");
@@ -153,6 +153,7 @@ public class frmMain extends javax.swing.JFrame {
                 Image img = new ImageIcon(this.getClass().getResource("/cards/" + String.valueOf(numeroCarta) + ".png")).getImage();
                 img = img.getScaledInstance(93, 138, java.awt.Image.SCALE_SMOOTH);
                 lblCarta.setIcon(new ImageIcon(img));
+               lblCarta.repaint();
             }
             try {
                 Thread.sleep(2000);
@@ -169,6 +170,10 @@ public class frmMain extends javax.swing.JFrame {
             btnJugar.setText("Jugar de nuevo");
             btnJugar.setEnabled(true);
             System.out.println("--------------FIN------------------------\n");
+            
+            player1 = new Jugador(1);
+            player2 = new Jugador(2);
+            player3 = new Jugador(3);
         }
 
         public int getNumeroCarta() {
@@ -285,8 +290,9 @@ public class frmMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnJugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJugarActionPerformed
+        
         generador = new Uno();
-        generador.comenzar_juego();
+        generador.start();
         player1.start();
         player2.start();
         player3.start();
